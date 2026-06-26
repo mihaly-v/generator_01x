@@ -590,22 +590,31 @@ footer {
     font-weight: bold;
 }
 
-/* オーバーレイ内をスクロール可能にする */
-.mobile-overlay-wrapper {
+/* 既存の .mobile-overlay-preview があればそれを上書き、なければ以下を追加 */
+.mobile-overlay-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    
+    /* ⚡ ここでスクロールを許可 */
     overflow: auto;
-    -webkit-overflow-scrolling: touch; /* iOSでのスムーズなスクロール */
+    -webkit-overflow-scrolling: touch;
+    
+    /* 中身を中央寄せ */
     display: flex;
-    flex-direction: column; /* 前面・背面が縦に並ぶ場合 */
+    flex-direction: column;
     align-items: center;
-    padding-bottom: 50px;
 }
 
-/* 画像の制約を解除して、コンテナ内での拡大を許可する */
-.mobile-overlay-wrapper img {
+/* 複製された画像に対するスタイル */
+.mobile-overlay-preview img {
+    /* ⚡ 拡大を許可するために max-width 等を解除 */
     max-width: none !important;
-    width: 90%;      /* 必要に応じて調整してください */
+    width: 100%;
     height: auto;
-    margin: 10px 0;
+    display: block;
 }

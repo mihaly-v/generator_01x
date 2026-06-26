@@ -892,12 +892,9 @@ wrapper.className = "mobile-overlay-wrapper";
 if (originalFront) {
     const cloneFront = originalFront.cloneNode(true);
     cloneFront.removeAttribute("id");
-    wrapper.appendChild(cloneFront); // ⚡ 直接overlayではなくwrapperに入れる
-}
-if (originalBack) {
-    const cloneBack = originalBack.cloneNode(true);
-    cloneBack.removeAttribute("id");
-    wrapper.appendChild(cloneBack); // ⚡ 直接overlayではなくwrapperに入れる
+    cloneFront.style.maxWidth = "none"; // 拡大制限を解除
+    cloneFront.style.width = "100%";    // 初期値設定
+    overlay.appendChild(cloneFront);
 }
 
 overlay.appendChild(wrapper); // ⚡ 最後にwrapperをoverlayに追加する
