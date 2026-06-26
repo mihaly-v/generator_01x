@@ -590,29 +590,28 @@ footer {
     font-weight: bold;
 }
 
-/* 既存の .mobile-overlay-preview があればそれを上書き、なければ以下を追加 */
+/* ⚡ 既存のスタイルを以下の要素に置き換え/追記 */
 .mobile-overlay-preview {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 9999;
     
-    /* ⚡ ここでスクロールを許可 */
-    overflow: auto;
+    /* スクロールを許可することでピンチ操作を有効にする */
+    overflow: auto !important;
     -webkit-overflow-scrolling: touch;
     
-    /* 中身を中央寄せ */
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* 複製された画像に対するスタイル */
+/* ⚡ 複製された画像に対するスタイルを強制的に適用 */
 .mobile-overlay-preview img {
-    /* ⚡ 拡大を許可するために max-width 等を解除 */
+    /* 幅の強制固定を解除し、元のサイズに戻す */
     max-width: none !important;
     width: 100%;
     height: auto;

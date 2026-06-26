@@ -881,24 +881,30 @@ document.addEventListener("DOMContentLoaded", () => {
         closeBtn.innerHTML = isJP ? "✕ 閉じる" : "✕ CLOSE";
         overlay.appendChild(closeBtn);
 
-        // 4. 元のプレビュー画像を複製してオーバーレイに突っ込む
+// 4. 元のプレビュー画像を探して複製(clone)してオーバーレイに突っ込む
 const originalFront = document.getElementById("resultImage");
 const originalBack = document.getElementById("resultImageBack");
-
-// ⚡ 共通のラッパー（スクロール可能にするためのコンテナ）を作成
-const wrapper = document.createElement("div");
-wrapper.className = "mobile-overlay-wrapper"; 
 
 if (originalFront) {
     const cloneFront = originalFront.cloneNode(true);
     cloneFront.removeAttribute("id");
-    cloneFront.style.maxWidth = "none"; // 拡大制限を解除
-    cloneFront.style.width = "100%";    // 初期値設定
+    
+    // ⚡ 拡大を許可するためのスタイルを直接付与
+    cloneFront.style.maxWidth = "none";
+    cloneFront.style.width = "100%";
+    
     overlay.appendChild(cloneFront);
 }
-
-overlay.appendChild(wrapper); // ⚡ 最後にwrapperをoverlayに追加する
-
+if (originalBack) {
+    const cloneBack = originalBack.cloneNode(true);
+    cloneBack.removeAttribute("id");
+    
+    // ⚡ 同様にスタイルを付与
+    cloneBack.style.maxWidth = "none";
+    cloneBack.style.width = "100%";
+    
+    overlay.appendChild(cloneBack);
+}
         // 5. 画面にオーバーレイを表示
         document.body.appendChild(overlay);
         
