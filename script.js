@@ -897,24 +897,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // 5. 画面にオーバーレイを表示
-document.body.appendChild(overlay);
-
-// ⚡ 【修正】プレビュー画像をコンテナに入れ、スクロール可能にする
-// 画像をそのまま表示するのではなく、スクロール可能なdivでラップします
-const imgContainer = document.createElement('div');
-imgContainer.style.width = "100%";
-imgContainer.style.height = "100%";
-imgContainer.style.overflow = "auto"; // これにより拡縮後のスクロールが可能になります
-imgContainer.style.webkitOverflowScrolling = "touch";
-
-const img = overlay.querySelector("img"); // 既に生成されているはずの画像
-img.style.maxWidth = "none"; // 制限を解除
-img.style.width = "200%";    // ⚡ ここを大きくすると初期状態が拡大されます（必要に応じて調整）
-img.style.display = "block";
-img.style.margin = "0 auto";
-
-imgContainer.appendChild(img);
-overlay.appendChild(imgContainer);
+        document.body.appendChild(overlay);
+        
+        // ⚡ 【重要】背後のメニューがスクロールするのを絶対に防ぐため、htmlとbodyの両方をロック
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
 
         // 6. 「閉じる」タップ時の処理
         closeBtn.addEventListener("click", () => {

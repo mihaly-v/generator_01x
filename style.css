@@ -590,8 +590,3 @@ footer {
     font-weight: bold;
 }
 
-/* プレビュー画面の画像に対する指定 */
-.preview-overlay img {
-    cursor: grab;
-    transition: none; /* 拡縮時にアニメーションさせない */
-}
