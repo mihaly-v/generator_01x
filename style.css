@@ -201,6 +201,13 @@ input[type="text"]:focus, select:focus, textarea:focus {
 .flex-row { display: flex; gap: 8px; }
 .flex-row > * { flex: 1; min-width: 0; }
 
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: #00f0ff; /* 選択時の色を指定 */
+  border: solid #fff;
+}
+
+
 /* 🌟 プレイスタイル、好きな種族、ストーリーを「横3列」に完全固定 */
 .checkbox-grid, .story-progress-grid {
     display: grid;
@@ -570,6 +577,10 @@ footer {
     padding: 6px 0;
     font-size: 10px;
     cursor: pointer;
+    border: 1px solid var(--border-flat);
+    font-family: "Orbitron", sans-serif;
+    font-weight: lighter;
+    color: #626973;
 }
 
 /* 選択時の点灯スタイル */

@@ -239,12 +239,14 @@ document.getElementById('btnLangJP').addEventListener('click', () => {
     document.getElementById('btnLangJP').classList.add('active');
     document.getElementById('btnLangEN').classList.remove('active');
     updateLanguageLabels(); constructFormOptions(); updateCard();
+    updateTimeLabels();
 });
 document.getElementById('btnLangEN').addEventListener('click', () => {
     currentLang = "EN";
     document.getElementById('btnLangEN').classList.add('active');
     document.getElementById('btnLangJP').classList.remove('active');
     updateLanguageLabels(); constructFormOptions(); updateCard();
+    updateTimeLabels();
 });
 
 dcSelect.addEventListener('change', () => {
@@ -463,13 +465,16 @@ ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, cardW, cardH);
     const copyrightX = (405 + (cardW - 165)) / 2;
     const copyrightY = cardH - 55 ; // バーコードの高さ(42px)の中央に合わせる
     
-    ctx.fillText('/// © SQUARE ENIX CO., LTD. All Rights Reserved. ///', copyrightX, copyrightY);
+    ctx.fillText('//////// [ © SQUARE ENIX ] ////////', copyrightX, copyrightY);
     ctx.restore();
 
     //////////////////////////////////////////
     //////////////////////////////////////////
 
-    drawLoginTimeVisualizer(ctx, cardW, cardH, themeColor, alertColor);
+    const layoutType = (orientation === 'vertical') ? 'vertical' : 'horizontal';
+    const pattern = document.querySelector('input[name="layoutPattern"]:checked').value; // A or B
+
+    drawLoginTimeVisualizer(ctx, cardW, cardH, themeColor, alertColor, layoutType, pattern);
 
 
     
@@ -537,73 +542,114 @@ ctxBack.save(); ctxBack.fillStyle = (backTextColor === '#ffffff') ? 'rgba(255,25
  * ログイン時間帯ビジュアライザー
  * 表面の右側に24時間の活動時間をドットで表示します
  */
-function drawLoginTimeVisualizer(ctx, cardW, cardH, themeColor, alertColor) {
-    const startX = cardW - 120; // カード右側からの位置
-    const startY = 450;         // 表示開始位置
-    const dotX = 36;
-    const dotY = 18;
-    const gap = 30;
-    const extraGap = 20;        // 11と12の間の追加距離
+/**
+ * ログイン時間帯ビジュアライザー
+ */
+/**
+ * ログイン時間帯ビジュアライザー
+ */
+/**
+ * ログイン時間帯ビジュアライザー
+ */
+function drawLoginTimeVisualizer(ctx, cardW, cardH, themeColor, alertColor, layoutType, pattern) {
+    // 【調整用パラメータ：基準位置】
+    const positions = {
+        vertical: { A: { x: cardW - 170, y: 450 }, B: { x: cardW - 70, y: 340 } },
+        horizontal: { A: { x: 600, y: 920 }, B: { x: 600, y: 820 } }
+    };
 
-    /**
-     * 文字列全体を反時計回りに90度回転させて描画する関数
-     */
-    function drawRotatedString(text, x, y, color) {
+    
+
+    // 【個別調整用：各要素の微調整】
+    // x, y で位置を自由にオフセット可能
+    const offsetConfig = {
+        vertical: {
+            wd: { x: 0, y: -65 },
+            hol: { x: 0, y: -65 },
+            time: { x: -55, y: 0 }
+        },
+        horizontal: {
+            wd: { x: 35, y: -65 },
+            hol: { x: 35, y: -65 },
+            time: { x: 20, y: 0 }
+        }
+    };
+
+    const pos = positions[layoutType][pattern];
+    const off = offsetConfig[layoutType];
+    const startX = pos.x;
+    const startY = pos.y;
+
+    const dotX = 36, dotY = 18, gap = 30, extraGap = 20;
+    const totalHeight = (23 * gap) + extraGap;
+
+    ctx.save();
+    ctx.translate(startX, startY);
+
+    if (layoutType === 'horizontal') {
+        ctx.rotate(-Math.PI / 2);
+    }
+
+    function drawLabel(text, x, y, color) {
         ctx.save();
         ctx.fillStyle = color;
         ctx.font = 'bold 16px Orbitron, sans-serif';
         ctx.textAlign = 'center';
-        
         ctx.translate(x, y);
-        ctx.rotate(-Math.PI / 2); // 反時計回りに90度回転
+        let rotation = Math.PI / 2;
+        if (layoutType === 'vertical') rotation += Math.PI;
+        ctx.rotate(rotation);
         ctx.fillText(text, 0, 0);
         ctx.restore();
     }
 
-    // 1. ラベルの描画 (HOLIDAYSはalertColor) ※位置はそのまま
-    drawRotatedString("HOLIDAYS", startX + (dotX / 2) - 16, startY - 60, themeColor);
-    drawRotatedString("WEEKDAYS", startX - 50 + (dotX / 2) - 16, startY - 60, alertColor);
+    const labelOffset = (pattern === 'B') ? -50 : 50;
+    const shift = (layoutType === 'vertical') ? 50 : 0;
+    
+    // ラベル位置をそれぞれ独立して適用
+    drawLabel("WEEKDAYS", labelOffset - shift + off.wd.x, off.wd.y, themeColor);
+    drawLabel("WEEKENDS", labelOffset - 50 + shift + off.hol.x, off.hol.y, alertColor);
 
     const wdBtns = document.querySelectorAll('#weekdayTimeGrid .time-selector-btn');
     const weBtns = document.querySelectorAll('#weekendTimeGrid .time-selector-btn');
 
-    // 反転描画のための全高計算
-    const totalHeight = (23 * gap) + extraGap;
-
     for (let i = 0; i < 24; i++) {
-        // i=0が一番下、i=23が一番上になるようにY座標を計算
-        const offset = (i >= 12) ? extraGap : 0;
-        const currentY = (startY + totalHeight) - (i * gap) - offset;
+        const gapOffset = (i >= 12) ? extraGap : 0;
+        let currentY = (layoutType === 'vertical') ? totalHeight - (i * gap) - gapOffset : (i * gap) + gapOffset;
 
-        // 平日列 (右側)
+        const leftColX = (layoutType === 'vertical') ? labelOffset - 50 : labelOffset;
+        const rightColX = (layoutType === 'vertical') ? labelOffset : labelOffset - 50;
+
         if (wdBtns[i]) {
             ctx.fillStyle = wdBtns[i].classList.contains('active') ? themeColor : '#0000003d';
-            ctx.fillRect(startX, currentY, dotX, dotY);
+            ctx.fillRect(leftColX, currentY, dotX, dotY);
         }
-
-        // 休日列 (左側)
         if (weBtns[i]) {
             ctx.fillStyle = weBtns[i].classList.contains('active') ? alertColor : '#0000003d';
-            ctx.fillRect(startX - 50, currentY, dotX, dotY);
+            ctx.fillRect(rightColX, currentY, dotX, dotY);
         }
 
-        // 2. 時刻表示 (0と12を回転させて描画)
+        // 時刻表示
         if (i === 0 || i === 12) {
             ctx.save();
             ctx.fillStyle = themeColor;
             ctx.font = 'bold 16px Orbitron, sans-serif';
             ctx.textAlign = 'center';
-            
-            const textX = startX + dotX + 15;
-            const textY = currentY + (dotY / 2);
-            
-            ctx.translate(textX, textY);
-            ctx.rotate(-Math.PI / 2); 
+            // 時刻位置も time.x, time.y で個別に適用
+            ctx.translate(leftColX + dotX + off.time.x, currentY + (dotY / 2) + off.time.y);
+
+            if (layoutType === 'vertical') {
+                ctx.rotate(-Math.PI / 2);
+            } else {
+                ctx.rotate(Math.PI / 2);
+            }
             ctx.fillText(i === 0 ? "0" : "12", 0, 0);
             ctx.restore();
         }
     }
+    ctx.restore();
 }
+
 // （ここに先ほどの drawCyberTwinWaveScale(targetCtx, cx, cy, color) 関数を貼り付けてください）
 
 // ⭕ 最終リファイン：内側増量高密度・11時開放・3点局所電撃＆全体さざ波システム
@@ -870,6 +916,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+//////////////////////////////////
+// 言語切り替え用関数を追加
+function updateTimeLabels() {
+    const isJP = document.getElementById('btnLangJP').classList.contains('active');
+    const lblWeekday = document.getElementById('lblWeekday');
+    const lblWeekend = document.getElementById('lblWeekend');
+    
+    if (isJP) {
+        lblWeekday.textContent = '平日のログイン時間';
+        lblWeekend.textContent = '休日のログイン時間';
+    } else {
+        lblWeekday.textContent = 'Weekdays';
+        lblWeekend.textContent = 'Weekends';
+    }
+}
 
 //////////////////////////////////
 //////////////////////////////////
