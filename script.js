@@ -6,6 +6,7 @@ let colorDebounceTimer = null; // カラーピッカーの間引き用タイマ�
 let isDrawingRequested = false; // 描画リクエストの重複防止フラグ
 let uiCacheCanvas = null;       // ⚡ 追加：UIキャッシュ用の記憶スペース
 let isUiCached = false;         // ⚡ 追加：UIを記憶したかどうかのフラグ
+
 const CYBER_PANEL_CONFIG = {
     fontSize: 24,            // 点灯式パネルの文字サイズ
 
@@ -881,30 +882,21 @@ document.addEventListener("DOMContentLoaded", () => {
         closeBtn.innerHTML = isJP ? "✕ 閉じる" : "✕ CLOSE";
         overlay.appendChild(closeBtn);
 
-// 4. 元のプレビュー画像を探して複製(clone)してオーバーレイに突っ込む
-const originalFront = document.getElementById("resultImage");
-const originalBack = document.getElementById("resultImageBack");
+        // 4. 元のプレビュー画像（最新の状態のもの）を探して複製(clone)してオーバーレイに突っ込む
+        const originalFront = document.getElementById("resultImage");
+        const originalBack = document.getElementById("resultImageBack");
 
-if (originalFront) {
-    const cloneFront = originalFront.cloneNode(true);
-    cloneFront.removeAttribute("id");
-    
-    // ⚡ 拡大を許可するためのスタイルを直接付与
-    cloneFront.style.maxWidth = "none";
-    cloneFront.style.width = "100%";
-    
-    overlay.appendChild(cloneFront);
-}
-if (originalBack) {
-    const cloneBack = originalBack.cloneNode(true);
-    cloneBack.removeAttribute("id");
-    
-    // ⚡ 同様にスタイルを付与
-    cloneBack.style.maxWidth = "none";
-    cloneBack.style.width = "100%";
-    
-    overlay.appendChild(cloneBack);
-}
+        if (originalFront) {
+            const cloneFront = originalFront.cloneNode(true);
+            cloneFront.removeAttribute("id"); // IDの重複を避ける
+            overlay.appendChild(cloneFront);
+        }
+        if (originalBack) {
+            const cloneBack = originalBack.cloneNode(true);
+            cloneBack.removeAttribute("id");
+            overlay.appendChild(cloneBack);
+        }
+
         // 5. 画面にオーバーレイを表示
         document.body.appendChild(overlay);
         
@@ -962,3 +954,48 @@ function initTimeSelectors() {
 // ページ読み込み時に実行される箇所に追加
 document.addEventListener('DOMContentLoaded', initTimeSelectors);
 
+
+// script.js のグローバル変数領域に追加
+let imageScale = 1.0;
+let imageOffsetX = 0;
+let imageOffsetY = 0;
+let isPinching = false;
+let initialPinchDistance = 0;
+let lastTouches = []; // 前回のタッチ座標保持用
+
+const imageElement = document.getElementById('resultImage');
+
+// 距離計算用関数
+function getDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+imageElement.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+        isPinching = true;
+        initialPinchDistance = getDistance(e.touches);
+    }
+    lastTouches = Array.from(e.touches);
+});
+
+imageElement.addEventListener('touchmove', (e) => {
+    if (isPinching && e.touches.length === 2) {
+        e.preventDefault();
+        const currentDistance = getDistance(e.touches);
+        const scaleFactor = currentDistance / initialPinchDistance;
+        
+        // 拡大縮小の更新（0.1〜5倍の範囲に制限）
+        imageScale = Math.min(Math.max(imageScale * scaleFactor, 0.1), 5.0);
+        initialPinchDistance = currentDistance;
+        
+        updateImageTransform(); // 描画更新関数（後述）
+    } else if (e.touches.length === 1) {
+        // 1本指なら移動（既存のドラッグロジックをここに統合）
+    }
+}, { passive: false });
+
+imageElement.addEventListener('touchend', (e) => {
+    if (e.touches.length < 2) isPinching = false;
+});
