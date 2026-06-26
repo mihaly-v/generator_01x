@@ -590,3 +590,22 @@ footer {
     font-weight: bold;
 }
 
+/* オーバーレイ内をスクロール可能にする */
+.mobile-overlay-wrapper {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; /* iOSでのスムーズなスクロール */
+    display: flex;
+    flex-direction: column; /* 前面・背面が縦に並ぶ場合 */
+    align-items: center;
+    padding-bottom: 50px;
+}
+
+/* 画像の制約を解除して、コンテナ内での拡大を許可する */
+.mobile-overlay-wrapper img {
+    max-width: none !important;
+    width: 90%;      /* 必要に応じて調整してください */
+    height: auto;
+    margin: 10px 0;
+}
