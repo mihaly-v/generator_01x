@@ -437,6 +437,48 @@ ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, cardW, cardH);
         drawCustomCyberPanel(ctx, p.en, profPt.x + CYBER_PANEL_CONFIG.offsetX + (col * CYBER_PANEL_CONFIG.phaseColumnWidth), currentY + (row * CYBER_PANEL_CONFIG.rowHeight), CYBER_PANEL_CONFIG.fontSize, p.val <= progressVal, themeColor); 
     });
 
+
+
+    // --- 追加：ピンチ操作用変数 ---
+let isPinching = false;
+let initialPinchDistance = 0;
+let initialScale = 1.0;
+
+// 2本指の距離を計算
+const getDistance = (touches) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+};
+
+// プレビュー表示要素（resultImage）に対するイベント設定
+// ※初期化処理内で行ってください
+resultImage.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+        isPinching = true;
+        initialPinchDistance = getDistance(e.touches);
+        initialScale = imgScale; // 現在のスケールを保持
+    }
+}, { passive: false });
+
+resultImage.addEventListener('touchmove', (e) => {
+    if (isPinching && e.touches.length === 2) {
+        e.preventDefault(); // 画面のズームを抑制
+        const currentDistance = getDistance(e.touches);
+        const scaleFactor = currentDistance / initialPinchDistance;
+        
+        // スケールの更新（0.1〜5倍の範囲で制限）
+        imgScale = Math.min(Math.max(initialScale * scaleFactor, 0.1), 5.0);
+        
+        // 再描画
+        renderCanvas();
+    }
+}, { passive: false });
+
+resultImage.addEventListener('touchend', (e) => {
+    if (e.touches.length < 2) isPinching = false;
+});
+
     // ⚡【表面】右下にメインジョブの3文字（アルファベット）をうっすらと表示
     ctx.save();
     ctx.textAlign = 'right';
@@ -955,47 +997,5 @@ function initTimeSelectors() {
 document.addEventListener('DOMContentLoaded', initTimeSelectors);
 
 
-// script.js のグローバル変数領域に追加
-let imageScale = 1.0;
-let imageOffsetX = 0;
-let imageOffsetY = 0;
-let isPinching = false;
-let initialPinchDistance = 0;
-let lastTouches = []; // 前回のタッチ座標保持用
 
-const imageElement = document.getElementById('resultImage');
 
-// 距離計算用関数
-function getDistance(touches) {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-}
-
-imageElement.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-        isPinching = true;
-        initialPinchDistance = getDistance(e.touches);
-    }
-    lastTouches = Array.from(e.touches);
-});
-
-imageElement.addEventListener('touchmove', (e) => {
-    if (isPinching && e.touches.length === 2) {
-        e.preventDefault();
-        const currentDistance = getDistance(e.touches);
-        const scaleFactor = currentDistance / initialPinchDistance;
-        
-        // 拡大縮小の更新（0.1〜5倍の範囲に制限）
-        imageScale = Math.min(Math.max(imageScale * scaleFactor, 0.1), 5.0);
-        initialPinchDistance = currentDistance;
-        
-        updateImageTransform(); // 描画更新関数（後述）
-    } else if (e.touches.length === 1) {
-        // 1本指なら移動（既存のドラッグロジックをここに統合）
-    }
-}, { passive: false });
-
-imageElement.addEventListener('touchend', (e) => {
-    if (e.touches.length < 2) isPinching = false;
-});

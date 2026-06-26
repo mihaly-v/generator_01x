@@ -590,9 +590,10 @@ footer {
     font-weight: bold;
 }
 
-/* style.css に追加 */
-.interactive-front {
-    touch-action: none; /* ブラウザ標準のピンチズームを無効化し、自作ロジックを優先 */
-    transform-origin: center center;
-    transition: transform 0.1s ease-out;
+
+
+#resultImage {
+    touch-action: none; /* ブラウザ側のデフォルトのピンチイン・アウトを無効化 */
+    user-select: none;
+    -webkit-user-select: none;
 }
