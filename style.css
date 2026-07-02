@@ -13,9 +13,51 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* それぞれのoption用のフォント指定 */
+.font-orbitron  { font-family: 'Orbitron', sans-serif; }
+.font-cinzel    { font-family: 'Cinzel', serif; }
+.font-montserrat{ font-family: 'Montserrat', sans-serif; }
+.font-techmono  { font-family: 'Share Tech Mono', monospace; }
+.font-notojp    { font-family: 'Noto Sans JP', sans-serif; }
+.font-mplus     { font-family: 'M PLUS 1p', sans-serif; }
+.font-notokr    { font-family: 'Noto Sans KR', sans-serif; }
+.font-blackhan  { font-family: 'Black Han Sans', sans-serif; }
+.font-rubik     { font-family: 'Rubik 80s Fade', sans-serif; }
+.font-syncopate { 
+  font-family: 'Syncopate', sans-serif; 
+  text-transform: uppercase; 
+}
+.font-audiowide { 
+  font-family: 'Audiowide', sans-serif; 
+}
+.font-majormono { 
+  font-family: 'Major Mono Display', monospace;
+}
+.font-stalinist { 
+  font-family: 'Stalinist One', sans-serif; 
+}
+.font-notable { 
+  font-family: 'Notable', sans-serif; 
+}
+.font-cinzeldec { 
+  font-family: 'Cinzel Decorative', serif; 
+}
+.font-gasoek { 
+  font-family: 'Gasoek One', sans-serif; 
+}
+.font-delagothic { 
+  font-family: 'Dela Gothic One', sans-serif; 
+}
+.font-hachimaru { 
+  font-family: 'Hachi Maru Pop', sans-serif; 
+}
+
 body {
-    font-family: 'Helvetica Neue', Arial, 'Noto Sans JP', sans-serif;
-    background-color: var(--bg-main);
+    font-family:  'Noto Sans JP', Arial, sans-serif;
+    /* background-color: var(--bg-main); */
+    background-color:#d8e6e9;
+    background: linear-gradient(135deg, #c1c6ce 0%, #d7d9db 100%);
+    background: linear-gradient(135deg, #4a8c91 0%, #803e68 100%);
     color: var(--text-main);
     display: flex;
     flex-direction: column;
@@ -32,13 +74,17 @@ header {
     align-items: center;
     height: 56px;
     z-index: 100;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 .header-title {
     font-family: 'Orbitron', sans-serif;
     font-size: 14px;
     font-weight: 900;
-    color: var(--text-main);
+    /* color: var(--text-main); */
+    color: #4a8c91;
     letter-spacing: 0.5px;
+    padding-left: 10px;
+    border-left: 4px solid #4a8c91;
 }
 /* .lang-switcher { display: flex; gap: 6px; } */
 .lang-btn {
@@ -63,7 +109,7 @@ header {
     display: flex;
     justify-content: center;
     width: 100%;
-    background-color: var(--bg-main);
+    /* background-color: var(--bg-main); */
 }
 
 .main-container {
@@ -73,7 +119,8 @@ header {
     justify-content: center; /* 一体化させ中央へ寄せる */
     width: 100%;
     max-width: 1220px; /* ⚠️ 600px + 600px + 間隔固定20px = 1220px */
-    height: calc(100vh - 56px);
+    /* height: calc(100vh - 56px); */
+    height: auto;
 }
 
 /* ⚙️ 左側：メニュー (最大横幅 600px) */
@@ -81,8 +128,8 @@ header {
     width: 50%;
     max-width: 600px; /* 👈 600pxに固定制限 */
     flex-shrink: 0;
-    background-color: var(--bg-panel);
-    border-left: 2px solid var(--border-flat);
+    /* background-color: var(--bg-panel);
+    border-left: 2px solid var(--border-flat); */
     padding: 16px;
     overflow-y: auto;
 }
@@ -92,9 +139,9 @@ header {
     width: 50%;
     max-width: 600px; /* 👈 600pxに固定制限 */
     flex-shrink: 0;
-    background-color: var(--bg-main);
-    border-left: 20px solid var(--bg-main); /* 👈 パネル間隔を常に20pxに完全固定 */
-    border-right: 2px solid var(--border-flat);
+    /* background-color: var(--bg-main);
+    border-left: 20px solid var(--bg-main); 
+    border-right: 2px solid var(--border-flat); */
     padding: 20px 20px 20px 0;
     display: flex;
     flex-direction: column;
@@ -104,42 +151,136 @@ header {
     gap: 8px;
 }
 
+.save-btn,.saveBack-btn {
+    position: relative; 
+    overflow: hidden;  
+    background-color: rgba(0, 250, 255, 0.25);
+    color: #ffffff;
+    border: 1px solid #00f0ff;
+    margin-top: 16px;
+    width: 240px;
+    height: 48px;
+    /* border: 1px solid #ffffff; */
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+    /* transition: all 0.3s ease; */
+}
+.x-btn {
+    position: relative; 
+    overflow: hidden;
+    margin-top: 16px;
+    width: 240px;
+    height: 48px;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #ffffff;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.save-btn::after,.saveBack-btn::after,.x-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%; /* スタート時はボタンの左側に隠しておく */
+    width: 50%;  /* 光の線の幅 */
+    height: 100%;
+    
+    /* 斜めの白いグラデーション光を作る */
+    background: linear-gradient(
+        90deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.6) 50%, 
+        rgba(255, 255, 255, 0) 100%
+    );
+    
+    transform: skewX(-25deg); /* 線を斜めにする */    
+}
+
+.save-btn:hover,.saveBack-btn:hover,.x-btn:hover {
+    background-color: rgba(0, 250, 255, 0.5);
+    color: #ffffff;
+    border: 1px solid #00f0ff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+.x-btn:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #00f0ff;
+    border: 1px solid #00f0ff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+.save-btn:hover::after,.saveBack-btn:hover::after,.x-btn:hover::after {
+
+    animation: btnAnimation 1.6s ease-in-out forwards infinite;
+}
+@keyframes btnAnimation{
+0% {
+    left: -100%;
+  }
+  100% {
+    left: 150%; /* ボタンの右側まで完全に突き抜ける */
+  }
+}
+
 .section-title {
     font-family: 'Orbitron', sans-serif;
     font-size: 14px;
-    color: var(--text-main);
+    /* color: var(--text-main); */
+    color: #ffffff;
     margin: 18px 0 8px 0;
-    border-left: 4px solid var(--text-main);
+    /* border-left: 4px solid var(--text-main); */
+    border-left: 4px solid #00f0ff;
     padding-left: 8px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
 .form-group {
     margin-bottom: 10px;
-    background: var(--bg-main);
+    /* background: var(--bg-main); */
+    background-color: rgba(255, 255, 255, 0.15);
     padding: 8px 12px;
     border-radius: var(--radius-md);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
 label {
     display: block;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    /* color: var(--text-muted); */
+    /* color:#3a3a3a; */
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
-/* 🌟 日本語・英語切り替え時にフォントサイズや高さがガタつかないよう固定統一 */
+/*  日本語・英語切り替え時にフォントサイズや高さがガタつかないよう固定統一 */
 input[type="text"], select, textarea {
     width: 100%;
-    height: 42px; /* 👈 高さを42pxに完全統一 */
-    background-color: var(--bg-panel);
+    height: 42px; 
+    /* background-color: var(--bg-panel); */
     border: 2px solid var(--border-flat);
-    color: var(--text-main);
+    /* color: var(--text-main); */
     padding: 0 10px; /* 上下パディングを排しheightベースで中央寄せ */
-    font-family: 'Noto Sans JP', sans-serif; /* 👈 フォントファミリー基準統一 */
-    font-size: 14px; /* 👈 日本語が最も綺麗に収まる14pxに完全統一 */
+    font-family: 'Noto Sans JP', sans-serif; 
+    font-size: 14px; 
     border-radius: var(--radius-sm);
     transition: var(--transition);
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+select option,optgroup {
+    color: #ffffff;
+    background-color: #606060;
+}
+input[type="text"]::placeholder { 
+    flex: 1.5; color: #cacaca;
 }
 textarea {
     height: 110px; /* テキストエリアのみ独自の高さを許可 */
@@ -151,8 +292,17 @@ input[type="text"]:focus, select:focus, textarea:focus {
 }
 
 .name-input-container { display: flex; gap: 8px; }
-.name-input-container input { flex: 1.5; }
-.name-input-container select { flex: 1; }
+.name-input-container input { 
+    flex: 1.5; color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+.name-input-container input::placeholder { 
+    flex: 1.5; color: #cacaca;
+}
+.name-input-container select { 
+    flex: 1; color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.25);
+}
 
 .custom-file-upload {
     display: flex;
@@ -160,15 +310,17 @@ input[type="text"]:focus, select:focus, textarea:focus {
     justify-content: center;
     width: 100%;
     height: 42px; /* 👈 高さを他のフォームと統一 */
-    background-color: var(--bg-panel);
-    border: 2px dashed var(--border-flat);
-    color: var(--text-main);
+    /* background-color: var(--bg-panel); */
+    border: 1px solid var(--border-flat);
+    /* color: var(--text-main); */
     font-family: 'Orbitron', sans-serif;
     font-size: 13px;
     font-weight: 700;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition);
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.25);
 }
 .custom-file-upload:hover {
     border-color: var(--border-focus);
@@ -177,34 +329,56 @@ input[type="text"]:focus, select:focus, textarea:focus {
 .custom-file-upload input[type="file"] { display: none; }
 
 .comment-container {
-    background-color: var(--bg-panel);
-    border: 2px solid var(--border-flat);
+    /* background-color: var(--bg-panel); */
+    border: 1px solid var(--border-flat);
     border-radius: var(--radius-sm);
     display: flex;
     flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.25);
+    margin-bottom: 6px;
+}
+.comment-container textarea::placeholder {
+    color: #cacaca;
 }
 .comment-container:focus-within { border-color: var(--border-focus); }
 .comment-container textarea {
     border: none;
     resize: none;
+    
 }
 .comment-font-select {
     border: none;
     border-top: 1px solid var(--border-flat);
-    background-color: var(--bg-main);
+    /* background-color: var(--bg-main); */
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     height: 34px; /* セレクトボックス単体で収まるサイズ */
     font-size: 13px;
     cursor: pointer;
+    color: #626973;
+    background-color: rgba(255, 255, 255, 0.75)   ;
 }
 
 .flex-row { display: flex; gap: 8px; }
 .flex-row > * { flex: 1; min-width: 0; }
 
 input[type="radio"],
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="range"] {
   accent-color: #00f0ff; /* 選択時の色を指定 */
   border: solid #fff;
+}
+input[type="range"] {
+    width: 100%;
+    max-width: 240px;
+}
+
+.alphaWrap {
+    padding-top: 10px;
+    text-align: center;
+    /* font-family: "Orbitron", sans-serif; */
+}
+.alphaWrap span {
+    display: none;
 }
 
 
@@ -253,7 +427,7 @@ input[type="color"]::-webkit-color-swatch { border: none; }
     gap: 6px;
 }
 .palette-btn {
-    background: var(--bg-panel);
+    /* background: var(--bg-panel); */
     border: 1px solid var(--border-flat);
     padding: 6px;
     cursor: pointer;
@@ -261,27 +435,42 @@ input[type="color"]::-webkit-color-swatch { border: none; }
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+.palette-btn:hover {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+.palette-btn:hover .palette-label {
+    color: #000000;
 }
 .palette-preview { display: flex; width: 100%; height: 14px; overflow: hidden; }
 .palette-color { flex: 1; }
-.palette-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-family: monospace; }
+.palette-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-family: "Orbitron", Arial, sans-serif; color: #ffffff;}
 
 .preview-wrapper {
     width: 100%;
     max-width: 560px;
-    background: var(--bg-panel);
-    border: 2px solid var(--border-flat);
+    /* background: var(--bg-panel); */
+    background-color: rgba(255, 255, 255, 0.15);
+    /* border: 2px solid var(--border-flat); */
     padding: 12px;
     border-radius: var(--radius-md);
     text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 .neon-badge {
+    width: 96%;
+    padding-left: 8px;
     display: inline-block;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 900;
-    color: var(--text-main);
+    /* color: var(--text-main); */
+    color: #ffffff;
+    margin-top: 4px;
     margin-bottom: 6px;
     font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    border-left: 4px solid #00f0ff;
 }
 .image-clip-container {
     width: 100%;
@@ -289,14 +478,18 @@ input[type="color"]::-webkit-color-swatch { border: none; }
     background-color: #ebedf2;
     border: 1px solid var(--border-flat);
     border-radius: var(--radius-sm);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
 }
 .preview-image {
     width: 100%;
     height: auto;
     display: block;
 }
-.preview-image.interactive-front { cursor: move; }
-.inst-text { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 4px; max-width: 560px; }
+.preview-image.interactive-front { 
+    cursor: move; 
+    display: none;
+}
+.inst-text { font-size: 12px; color: #ffffff; text-align: center; margin-top: 4px; margin-bottom: 20px; max-width: 560px; }
 
 footer {
     background-color: var(--bg-panel);
@@ -318,7 +511,7 @@ footer {
     text-decoration: underline;
 }
 
-#cardCanvas, #cardCanvasBack, #hiddenQrContainer { display: none; }
+#cardLoadCanvas,#cardCanvas, #cardCanvasBack, #hiddenQrContainer { display: none; }
 
 /* プレビュー画像にカード風の角丸と陰影を追加 */
 #resultImage, #resultImageBack {
@@ -336,6 +529,8 @@ footer {
     margin-bottom: 3px;
     display: inline-flex;
     align-items: center;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 /* 📱 画面幅が 768px 以下のスマホサイズ時の設定 */
@@ -571,7 +766,7 @@ footer {
 }
 
 .time-selector-btn {
-    background: #fff;
+    /* background: #fff; */
     border: none;
     border-radius: 2px;
     padding: 6px 0;
@@ -580,7 +775,12 @@ footer {
     border: 1px solid var(--border-flat);
     font-family: "Orbitron", sans-serif;
     font-weight: lighter;
-    color: #626973;
+    /* color: #626973; */
+    background-color: rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+}
+.time-selector-btn:hover {
+    background-color: rgba(0, 250, 255, 0.25);
 }
 
 /* 選択時の点灯スタイル */
@@ -591,9 +791,30 @@ footer {
 }
 
 
+/*  */
 
-#resultImage {
-    touch-action: none; /* ブラウザ側のデフォルトのピンチイン・アウトを無効化 */
-    user-select: none;
-    -webkit-user-select: none;
+.preview_fit {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1000/1545;
+}
+.preview {
+    /* background-color: aqua; */
+    position: relative;
+    /* height: 772.5px ;
+    width: 500px ; */
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    margin: 0 auto;
+
+    
+}
+.preview canvas {        
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
 }
